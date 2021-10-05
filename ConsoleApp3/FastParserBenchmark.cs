@@ -150,8 +150,10 @@ namespace csFastFloat.Benchmark
     }
 
 
-    [Params(@"c:\temp\synthetic.txt")]
-    public string FileName;
+    
+   [Params(@"data/synthetic.txt" )]
+   public string FileName;
+
 
     [GlobalSetup]
     public void Setup()
