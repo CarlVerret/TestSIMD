@@ -35,6 +35,10 @@ namespace csFastFloat.Benchmark
     unsafe public double IsEightDigit_SIMD()
     {
       double max = double.MinValue;
+
+       Vector128<short> ascii0 = Vector128.Create((short)47);
+      Vector128<short> after_ascii9 = Vector128.Create((short)58);
+
  var d = 0;
       foreach (var l in _lines)
       {
@@ -92,15 +96,15 @@ namespace csFastFloat.Benchmark
       return max;
     }
 
-     static  Vector128<short> ascii0 = Vector128.Create((short)48);
-     static Vector128<short> after_ascii9 = Vector128.Create((short)58);
-
+  
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     unsafe internal static bool is_made_of_eight_digits_fast_simd(char* chars)
     {
       // We only enable paths depending on this function on little endian
       // platforms (it happens to be effectively nearly everywhere).
 
+     Vector128<short> ascii0 = Vector128.Create((short)47);
+      Vector128<short> after_ascii9 = Vector128.Create((short)58);
 
     
       Vector128<short> raw = Sse41.LoadDquVector128((short*)chars);
