@@ -45,7 +45,7 @@ namespace csFastFloat.Benchmark
 
             var a = Sse41.CompareGreaterThan(raw, ascii0);
             var b = Sse41.CompareLessThan(raw, after_ascii9);
-            var c = Sse41.AndNot(a, b);
+             var c = Sse2.Subtract(a, b);;
 
 
           bool res = (Sse41.TestZ(c, c));
