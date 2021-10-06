@@ -81,8 +81,8 @@ namespace csFastFloat.Benchmark
       return max;
     }
 
-    static  Vector128<short> ascii0 = Vector128.Create((short)48);
-    static Vector128<short> after_ascii9 = Vector128.Create((short)58);
+     static  Vector128<short> ascii0 = Vector128.Create((short)48);
+     static Vector128<short> after_ascii9 = Vector128.Create((short)58);
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]
     unsafe internal static bool is_made_of_eight_digits_fast_simd(char* chars)
@@ -95,19 +95,13 @@ namespace csFastFloat.Benchmark
       Vector128<short> raw = Sse3.LoadDquVector128((short*)chars);
 
 
-      var a = Sse2.CompareGreaterThan(raw, ascii0);
-      var b = Sse2.CompareLessThan(raw, after_ascii9);
-      var c = Sse2.AndNot(a, b);
-
-      return Sse2.Equals(c, Vector128<short>.Zero);
+      var a = Sse3.CompareGreaterThan(raw, ascii0);
+      var b = Sse3.CompareLessThan(raw, after_ascii9);
+      var c = Sse3.AndNot(a, b);
 
 
-      //var a = (val & 0xF0F0F0F0F0F0F0F0);
-      //var b = (val + 0x0606060606060606);
-      //var c = (b & 0xF0F0F0F0F0F0F0F0) >> 4;
+     return (Sse41.TestZ(c, c));
 
-      //return BitConverter.IsLittleEndian &&
-      //  ((a | c) == 0x3333333333333333);
     }
 
 
