@@ -35,12 +35,21 @@ namespace csFastFloat.Benchmark
     unsafe public double IsEightDigit_SIMD()
     {
       double max = double.MinValue;
-
+ var d = 0;
       foreach (var l in _lines)
       {
         fixed (char* start = l)
         {
-          double d = is_made_of_eight_digits_fast_simd(start) ? 1 : 0;
+
+            Vector128<short> raw = Sse41.LoadDquVector128((short*)start);
+
+            var a = Sse41.CompareGreaterThan(raw, ascii0);
+            var b = Sse41.CompareLessThan(raw, after_ascii9);
+            var c = Sse41.AndNot(a, b);
+
+
+          bool res = (Sse41.TestZ(c, c));
+          d +=  res ? 1 :0;
           max = d > max ? d : max;
         }
       }
@@ -52,13 +61,14 @@ namespace csFastFloat.Benchmark
     unsafe public double IsEightDigit_Loop()
     {
       double max = double.MinValue;
-
+      var d = 0;
       foreach (var l in _lines)
       {
         fixed (char* start = l)
         {
-          double d = is_made_of_eight_digits_loop(start) ? 1 : 0;
+         d +=  is_made_of_eight_digits_loop(start)? 1 :0;
           max = d > max ? d : max;
+         
         }
       }
       return max;
@@ -69,12 +79,13 @@ namespace csFastFloat.Benchmark
     unsafe public double IsEightDigit_UTF8()
     {
       double max = double.MinValue;
+      var d = 0;
 
       foreach (var l in _linesUtf8)
       {
         fixed (byte* start = l)
         {
-          double d = is_made_of_eight_digits_fast(start) ? 1 : 0;
+         d +=  is_made_of_eight_digits_fast(start)? 1 :0;
           max = d > max ? d : max;
         }
       }
@@ -95,13 +106,13 @@ namespace csFastFloat.Benchmark
       Vector128<short> raw = Sse41.LoadDquVector128((short*)chars);
 
 
-      var a = Sse41.CompareGreaterThan(raw, ascii0);
-      var b = Sse41.CompareLessThan(raw, after_ascii9);
-      var c = Sse41.AndNot(a, b);
+      var a = Sse2.CompareGreaterThan(raw, ascii0);
+      var b = Sse2.CompareLessThan(raw, after_ascii9);
+      var c = Sse2.Subtract(a, b);;
 
      //was: return Sse2.Equals(c, Vector128<short>.Zero);
 
-     return (Sse41.TestZ(c, c));
+     return (Sse41.TestZ(c,c));
 
     }
 
