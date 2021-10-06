@@ -43,8 +43,8 @@ namespace csFastFloat.Benchmark
 
             Vector128<short> raw = Sse41.LoadDquVector128((short*)start);
 
-            var a = Sse41.CompareGreaterThan(raw, ascii0);
-            var b = Sse41.CompareLessThan(raw, after_ascii9);
+            var a = Sse2.CompareGreaterThan(raw, ascii0);
+            var b = Sse2.CompareLessThan(raw, after_ascii9);
              var c = Sse2.Subtract(a, b);;
 
 
