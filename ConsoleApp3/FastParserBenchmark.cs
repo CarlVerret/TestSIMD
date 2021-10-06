@@ -99,6 +99,7 @@ namespace csFastFloat.Benchmark
       var b = Sse41.CompareLessThan(raw, after_ascii9);
       var c = Sse41.AndNot(a, b);
 
+     //was: return Sse2.Equals(c, Vector128<short>.Zero);
 
      return (Sse41.TestZ(c, c));
 
